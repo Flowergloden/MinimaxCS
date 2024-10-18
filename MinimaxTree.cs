@@ -7,34 +7,34 @@ namespace MinimaxCS
     {
         public MinimaxTree(TGame game, TData data, int maxDepth, bool bMaximizing)
         {
-            Game = game;
-            MaxDepth = maxDepth;
+            _game = game;
+            _maxDepth = maxDepth;
             _bMaximizing = bMaximizing;
-            Root = new MinimaxNode<TData>(data, null);
+            _root = new MinimaxNode<TData>(data, null);
         }
 
-        public TGame Game { get; }
-        public MinimaxNode<TData> Root { get; }
-        public int MaxDepth { get; }
+        private readonly TGame _game;
+        private readonly MinimaxNode<TData> _root;
+        private readonly int _maxDepth;
         private readonly bool _bMaximizing;
 
         public TData Run()
         {
-            InnerMinimax(Root, 0, _bMaximizing);
+            InnerMinimax(_root, 0, _bMaximizing);
 
-            return _bMaximizing ? Root.Nodes.Max().Data : Root.Nodes.Min().Data;
+            return _bMaximizing ? _root.Nodes.Max().Data : _root.Nodes.Min().Data;
         }
 
         private void InnerMinimax(MinimaxNode<TData> node, int depth, bool bMaximizing)
         {
-            if (depth == 0 || depth >= MaxDepth)
+            if (depth == 0 || depth >= _maxDepth)
             {
-                var res = Game.Evaluate(node.Data);
+                var res = _game.Evaluate(node.Data);
                 node.Value = res;
                 return;
             }
 
-            foreach (var child in Game.GetPossibleMoves(node.Data).Select(move => new MinimaxNode<TData>(move, node)))
+            foreach (var child in _game.GetPossibleMoves(node.Data).Select(move => new MinimaxNode<TData>(move, node)))
             {
                 node.Nodes.Add(child);
                 InnerMinimax(child, depth + 1, !bMaximizing);
