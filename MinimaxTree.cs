@@ -21,6 +21,10 @@ namespace MinimaxCS
         public TData Run()
         {
             InnerMinimax(_root, _maxDepth, _bMaximizing);
+            if (_root.Nodes.Count == 0)
+            {
+                return _root.Data;
+            }
 
             return _bMaximizing ? _root.Nodes.Max().Data : _root.Nodes.Min().Data;
         }
