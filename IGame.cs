@@ -7,5 +7,7 @@ namespace MinimaxCS
         public float Evaluate(TData data);
 
         public List<TData> GetPossibleMoves(TData data);
+
+        public bool IsEnd(TData data);
     }
 }

@@ -20,14 +20,14 @@ namespace MinimaxCS
 
         public TData Run()
         {
-            InnerMinimax(_root, 0, _bMaximizing);
+            InnerMinimax(_root, _maxDepth, _bMaximizing);
 
             return _bMaximizing ? _root.Nodes.Max().Data : _root.Nodes.Min().Data;
         }
 
         private void InnerMinimax(MinimaxNode<TData> node, int depth, bool bMaximizing)
         {
-            if (depth == 0 || depth >= _maxDepth)
+            if (depth <= 0 || _game.IsEnd(node.Data))
             {
                 var res = _game.Evaluate(node.Data);
                 node.Value = res;
@@ -37,7 +37,7 @@ namespace MinimaxCS
             foreach (var child in _game.GetPossibleMoves(node.Data).Select(move => new MinimaxNode<TData>(move, node)))
             {
                 node.Nodes.Add(child);
-                InnerMinimax(child, depth + 1, !bMaximizing);
+                InnerMinimax(child, depth - 1, !bMaximizing);
             }
 
             node.Value = bMaximizing ? node.Nodes.Max(x => x.Value) : node.Nodes.Min(x => x.Value);
